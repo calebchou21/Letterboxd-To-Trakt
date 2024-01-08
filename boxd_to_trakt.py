@@ -1,5 +1,7 @@
 import argparse
 import authorize
+import json
+import requests
 
 from datetime import datetime
 from CSVreader import CSVReader
@@ -37,13 +39,33 @@ def read_data(reader, csv_type):
     except FileNotFoundError as e:
         print(f"FileNotFoundError: {e}")
 
+
 def make_transfer(reader, csv_type):
     data = read_data(reader, csv_type)
+    pydata = {
+            'movies': data
+            }
+    json_data = json.dumps(pydata)
     print("Data successfully read from CSV.")
     print("Beginning Trakt.tv authentication progress.")
-    authorize.authorize()
+    auth_token = authorize.authorize()
     print("Authentication successful, beginning data transfer.")
     
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + auth_token,
+        'trakt-api-version': '2',
+        'trakt-api-key': authorize.CLIENT_ID
+    }
+
+    add_to_hist_endpoint = "https://api.trakt.tv/sync/history"
+    response = requests.post(add_to_hist_endpoint, data=json_data, headers=headers)
+
+    if response.status_code == 201:
+        print("Succesfully transfered data to Trakt!")
+    else:
+        print("Some (or all) data failed to transfer.")
+
 def main():
     parser = argparse.ArgumentParser(description='Letterboxd to Trakt.tv')
 

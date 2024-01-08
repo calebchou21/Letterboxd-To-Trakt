@@ -17,10 +17,9 @@ class CSVReader:
             for row in csvreader:
                 date, name, year, letterboxd_uri = row
                 data.append({
-                    'date': date,
-                    'name': name,
+                    'watched_at': date,
+                    'title': name,
                     'year': year,
-                    'uri': letterboxd_uri
                 })
         return data
 
@@ -42,13 +41,8 @@ class CSVReader:
                 # We get diary data here
                 date, name, year, letterboxd_uri, rating, rewatch, tags, watched_date = row
                 data.append({
-                    'date': date,
-                    'name': name,
+                    'watched_at': date,
+                    'title': name,
                     'year': year,
-                    'uri': letterboxd_uri,
-                    'rating': rating,
-                    'rewatch': rewatch,
-                    'tags': tags,
-                    'watched_date': watched_date
                 })
         return data
