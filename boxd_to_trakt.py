@@ -1,4 +1,5 @@
 import argparse
+import authorize
 
 from datetime import datetime
 from CSVreader import CSVReader
@@ -23,7 +24,7 @@ def parse_args(args):
         raise argparse.ArgumentError(None, "Last entered date should not be provided for 'watched' csv type.")
     
     reader = CSVReader(filename, last_entered)
-    data = read_data(reader, csv_type)
+    make_transfer(reader, csv_type)
 
 def read_data(reader, csv_type):
     try:
@@ -35,8 +36,14 @@ def read_data(reader, csv_type):
         return data
     except FileNotFoundError as e:
         print(f"FileNotFoundError: {e}")
-    
 
+def make_transfer(reader, csv_type):
+    data = read_data(reader, csv_type)
+    print("Data successfully read from CSV.")
+    print("Beginning Trakt.tv authentication progress.")
+    authorize.authorize()
+    print("Authentication successful, beginning data transfer.")
+    
 def main():
     parser = argparse.ArgumentParser(description='Letterboxd to Trakt.tv')
 
@@ -49,8 +56,6 @@ def main():
         parse_args(args)
     except argparse.ArgumentError as e:
         print(f"ArgumentError: {e}")
-
-    
 
 if __name__ == "__main__":
     main()
