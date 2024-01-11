@@ -15,7 +15,7 @@ so you can continue to log movies on Letterboxd and then occassionally run this 
 3. Drag the diary or watched file into the same directory as the scripts
 4. Run python3 boxd_to_trakt.py csv_type
 5. A web browser will open and you will have to log in to Trakt.tv
-6. Hopefully it worked
+
 
 ## Examples
 * python3 boxd_to_trakt.py diary
